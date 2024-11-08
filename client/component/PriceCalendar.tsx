@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   Flex,
   Card,
+  Container,
 } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { usePrices } from "../hooks/usePrice";
@@ -48,45 +49,50 @@ export const PricingCalendar: React.FC = () => {
   const nextMonth = () => setCurrentMonth(goToNextMonth(currentMonth));
 
   return (
-    <Card
-      shadow="sm"
-      ta={"center"}
-      padding="lg"
-      className="items-center"
-      radius="md"
-      withBorder
-      w={"50%"}
-      mx={"auto"}
-    >
-      <Box w={"100%"} p={20} ta="center">
-        <Flex justify="space-between" align="center" mb="md">
-          <ActionIcon onClick={prevMonth}>
-            <IconChevronLeft />
-          </ActionIcon>
-          <Text size="xl">{monthTitle}</Text>
-          <ActionIcon onClick={nextMonth}>
-            <IconChevronRight />
-          </ActionIcon>
-        </Flex>
+    <Container>
+      <Card
+        shadow="sm"
+        ta={"center"}
+        padding="lg"
+        className="items-center"
+        radius="md"
+        withBorder
+        mx={"auto"}
+      >
+        <Box w={"100%"} p={20} ta="center">
+          <Flex justify="space-between" align="center" mb="md">
+            <ActionIcon onClick={prevMonth}>
+              <IconChevronLeft />
+            </ActionIcon>
+            <Text size="xl">{monthTitle}</Text>
+            <ActionIcon onClick={nextMonth}>
+              <IconChevronRight />
+            </ActionIcon>
+          </Flex>
 
-        <SimpleGrid cols={7} spacing="xs">
-          {days.map((date, index) => {
-            if (!date) {
-              return <Box key={index} style={{ minHeight: "80px" }} />;
-            }
-            const priceData = getPriceDataForDate(date, prices, roomId);
+          <SimpleGrid
+            cols={{ base: 3, sm: 3, lg: 5 }}
+            spacing={{ base: 10, sm: "xl" }}
+            verticalSpacing={{ base: "md", sm: "xl" }}
+          >
+            {days.map((date, index) => {
+              if (!date) {
+                return <Box key={index} style={{ minHeight: "80px" }} />;
+              }
+              const priceData = getPriceDataForDate(date, prices, roomId);
 
-            return (
-              <DaysOfTheMonth
-                key={format(date, "yyyy-MM-dd")}
-                date={date}
-                priceData={priceData}
-                currencySymbol={prices?.currency.symbol ?? "$"}
-              />
-            );
-          })}
-        </SimpleGrid>
-      </Box>
-    </Card>
+              return (
+                <DaysOfTheMonth
+                  key={format(date, "yyyy-MM-dd")}
+                  date={date}
+                  priceData={priceData}
+                  currencySymbol={prices?.currency.symbol ?? "$"}
+                />
+              );
+            })}
+          </SimpleGrid>
+        </Box>
+      </Card>
+    </Container>
   );
 };

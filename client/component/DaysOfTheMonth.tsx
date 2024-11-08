@@ -31,14 +31,14 @@ export const DaysOfTheMonth: React.FC<CalendarDayProps> = ({
       itemType="center"
       bd={10}
     >
-      <Text color="black">{format(date, "dd")}</Text>
+      <Text color={highlight ? "white" : "black"}>{format(date, "dd")}</Text>
       {priceData?.error ? (
         <Text color="red" size="lg">
           N/A
         </Text>
       ) : (
         <>
-          <Text size="sm" color="black">
+          <Text size="sm" color={highlight ? "green" : "black"}>
             {currencySymbol}
             {priceData?.price}
           </Text>
