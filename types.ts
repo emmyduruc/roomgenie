@@ -1,3 +1,5 @@
+import { getPrices, getSettings } from "./client/utils/api";
+
 export type PriceDataForDayRoom = {
 	error?: boolean;
 	error_reason?: string;
@@ -37,3 +39,6 @@ export type SettingsData = {
 		};
 	};
 };
+
+export type PriceQueryType = Awaited<ReturnType<typeof getPrices>>;
+export type SettingQueryTypes = Awaited<ReturnType<typeof getSettings>>;
