@@ -1,16 +1,24 @@
 import type { PriceData, SettingsData } from "../../types";
+import { Logger } from "./logger";
+
+const logger = new Logger();
 
 export const getPrices = async () => {
-  const response = await fetch("/api/prices");
+  try {
+    const response = await fetch("/api/prices");
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch prices");
+    if (!response.ok) {
+      throw new Error("Failed to fetch prices");
+    }
+
+    return response.json() as Promise<PriceData>;
+  } catch (error) {
+    logger.error("Failed to fetch prices", error);
   }
-
-  return response.json() as Promise<PriceData>;
 };
 
 export const getSettings = async () => {
+  try {
   const response = await fetch("/api/settings");
 
   if (!response.ok) {
@@ -18,4 +26,7 @@ export const getSettings = async () => {
   }
 
   return response.json() as Promise<SettingsData>;
+} catch (error) {
+  logger.error("Failed to fetch settings", error);
+}
 };
