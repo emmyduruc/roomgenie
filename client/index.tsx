@@ -17,7 +17,7 @@ function App() {
 				<Box p="sm">
 					<RoomPriceGenieLogo />
 				</Box>
-				<PricingCalendar />
+			<PricingCalendar />
 			</MantineProvider>
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>

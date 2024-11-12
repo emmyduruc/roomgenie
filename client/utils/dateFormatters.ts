@@ -1,31 +1,70 @@
-import { format, getDaysInMonth, startOfMonth, getDay, addMonths, subMonths } from "date-fns";
-import { TZDate } from "@date-fns/tz";
-import { PriceData } from "../../types";
+import {
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  getDay,
+  addMonths,
+  subMonths,
+} from 'date-fns';
+import { PriceData } from '../../types';
 
-export const getMonthTitle = (date: Date, timezone: string): string => {
-  const tzDate = new TZDate(date, timezone);
-  return format(tzDate, "MMMM yyyy");
+export const formatDateInTimeZone = (
+  date: Date,
+  timezone: string,
+  locale: string,
+  formatOptions: Intl.DateTimeFormatOptions
+) => {
+  return new Intl.DateTimeFormat(locale, {
+    timeZone: timezone,
+    ...formatOptions,
+  }).format(date);
 };
 
-export const generateCalendarDays = (currentMonth: Date, timezone: string) => {
-  const daysInCurrentMonth = getDaysInMonth(currentMonth);
-  const firstDayOfMonth = getDay(startOfMonth(currentMonth));
-
-  return Array.from({ length: firstDayOfMonth + daysInCurrentMonth }, (_, i) => {
-    if (i < firstDayOfMonth) {
-      return null; 
-    }
-    const day = i - firstDayOfMonth + 1;
-    return new TZDate(currentMonth.getFullYear(), currentMonth.getMonth(), day, timezone);
+export const getMonthTitle = (
+  date: Date,
+  timezone: string,
+  locale: string
+): string => {
+  return formatDateInTimeZone(date, timezone, locale, {
+    month: 'long',
+    year: 'numeric',
   });
 };
 
+export const generateCalendarDays = (currentMonth: Date) => {
+  const start = startOfMonth(currentMonth);
+  const end = endOfMonth(currentMonth);
+
+  const daysInMonth = eachDayOfInterval({ start, end });
+
+  const firstDayOfWeek = getDay(start);
+
+  const daysArray: (Date | null)[] = [];
+
+  for (let i = 0; i < firstDayOfWeek; i++) {
+    daysArray.push(null);
+  }
+
+  daysArray.push(...daysInMonth);
+
+  return daysArray;
+};
+
 export const getPriceDataForDate = (
-  date: TZDate,
+  date: Date,
+  timezone: string,
+  locale: string,
   prices: PriceData | undefined,
-  roomId: string
+  roomId: string | null
 ) => {
-  const dateKey = format(date, "yyyy-MM-dd");
+  if (!roomId) return null;
+
+  const dateKey = formatDateInTimeZone(date, timezone, 'en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
   return prices?.prices.data[dateKey]?.[roomId];
 };
 
