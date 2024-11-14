@@ -45,9 +45,11 @@ export const DaysOfTheMonth: React.FC<CalendarDayProps> = ({
     day: '2-digit',
   }).format(date);
 
+
   return (
     <div
-      className={`relative shadow-lg border min-w-[100px] gap-2 rounded-md p-2 min-h-[100px] transition-colors duration-300 ${bgColorClass
+      className={`relative shadow-lg border min-w-[100px] gap-2 rounded-md p-2 min-h-[100px] transition-transform transition-shadow transition-bg duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl ${
+        bgColorClass
       }`}
     >
       {dotColor && (
@@ -63,15 +65,15 @@ export const DaysOfTheMonth: React.FC<CalendarDayProps> = ({
           }`}
         ></div>
       )}
-
+  
       <Text className={`${textColorClass} font-bold text-lg`}>
         {dayNumber}
       </Text>
-
+  
       {priceData?.error ? (
         <Text className="text-sm text-red-500 animate-pulse">{'N/A'}</Text>
       ) : (
-        <Container className="transition-opacity duration-500">
+        <Container className="transition-opacity duration-500 ease-in-out">
           <Text className={`text-xs ${textColorClass}`}>
             {currencyCode + formattedPrice}
           </Text>
